@@ -20,6 +20,12 @@ pipx install envault
 
 ## Usage
 
+**Initialize envault with a backend (e.g., S3, local):**
+
+```bash
+envault init --backend s3 --bucket my-secure-bucket
+```
+
 **Push your `.env` file to an encrypted backend:**
 
 ```bash
@@ -38,10 +44,10 @@ envault pull --project my-app --output .env
 envault list
 ```
 
-**Initialize envault with a backend (e.g., S3, local):**
+**Delete a stored project:**
 
 ```bash
-envault init --backend s3 --bucket my-secure-bucket
+envault delete --project my-app
 ```
 
 Secrets are encrypted client-side before being sent to any backend. Your plaintext values never leave your machine unencrypted.

@@ -50,6 +50,12 @@ envault list
 envault delete --project my-app
 ```
 
+**Rotate the encryption key for a stored project:**
+
+```bash
+envault rotate --project my-app
+```
+
 Secrets are encrypted client-side before being sent to any backend. Your plaintext values never leave your machine unencrypted.
 
 ---

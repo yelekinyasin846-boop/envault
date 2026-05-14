@@ -80,3 +80,33 @@ def read_events(
     if limit is not None:
         events = events[-limit:]
     return events
+
+
+def clear_events(
+    vault_dir: Optional[Path] = None,
+    vault_name: Optional[str] = None,
+) -> int:
+    """Remove audit events from the log, returning the number of entries deleted.
+
+    If ``vault_name`` is provided, only events for that vault are removed and
+    the remaining events are written back to the log.  If ``vault_name`` is
+    ``None``, the entire log file is cleared.
+    """
+    log_path = get_audit_log_path(vault_dir)
+    if not log_path.exists():
+        return 0
+
+    if vault_name is None:
+        all_events = read_events(vault_dir=vault_dir)
+        log_path.unlink()
+        return len(all_events)
+
+    all_events = read_events(vault_dir=vault_dir)
+    kept = [e for e in all_events if e.get("vault") != vault_name]
+    removed = len(all_events) - len(kept)
+
+    with open(log_path, "w", encoding="utf-8") as fh:
+        for entry in kept:
+            fh.write(json.dumps(entry) + "\n")
+
+    return removed
